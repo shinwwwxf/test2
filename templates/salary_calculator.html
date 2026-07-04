@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-card">
+    <div class="page-head">
+        <h2>授課報酬計算</h2>
+        <p>依照課程標籤、授課時長與解題數量，快速估算教師當次授課報酬。</p>
+    </div>
+
+    <div class="calculator-layout">
+        <form method="post" class="calculator-form">
+            {% csrf_token %}
+            <label>課程標籤</label>
+            <select name="lesson_label" required>
+                <option value="">請選擇</option>
+                <option value="國小解題教室">國小解題教室</option>
+                <option value="國中解題教室">國中解題教室</option>
+                <option value="高中解題教室">高中解題教室</option>
+            </select>
+
+            <label>授課時長（分鐘）</label>
+            <input type="number" step="1" name="duration_minutes" required>
+
+            <label>解題數量（題）</label>
+            <input type="number" step="1" name="question_count" required>
+
+            <button type="submit">計算薪水</button>
+        </form>
+
+        <div class="calculator-info">
+            <h3>計算說明</h3>
+            <ul>
+                <li>包含準備費、形象費與教材加給</li>
+                <li>授課時長會依照 30 分鐘換算</li>
+                <li>解題數量會按課程標籤計算報酬</li>
+            </ul>
+        </div>
+    </div>
+
+    {% if result %}
+        <div class="result">
+            {% if result.error %}
+                <p class="result-error">{{ result.error }}</p>
+            {% else %}
+                <h3>估算結果</h3>
+                <div class="result-grid">
+                    <div><strong>課程標籤</strong><span>{{ result.lesson_label }}</span></div>
+                    <div><strong>授課時長</strong><span>{{ result.duration_minutes }} 分鐘</span></div>
+                    <div><strong>解題數量</strong><span>{{ result.question_count }} 題</span></div>
+                    <div><strong>準備費</strong><span>{{ result.preparation_fee }}</span></div>
+                    <div><strong>形象費</strong><span>{{ result.image_fee }}</span></div>
+                    <div><strong>教材加給</strong><span>{{ result.material_fee }}</span></div>
+                    <div><strong>授課基礎費</strong><span>{{ result.duration_fee }}</span></div>
+                    <div><strong>解題費用</strong><span>{{ result.question_fee }}</span></div>
+                </div>
+                <div class="total-box">
+                    <span>總薪資</span>
+                    <strong>{{ result.total_salary }}</strong>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
