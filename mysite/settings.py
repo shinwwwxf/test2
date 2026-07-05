@@ -62,11 +62,17 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'year_project',            # 在 phpmyadmin 建立的資料庫名稱
+        'USER': 'root',                    # XAMPP 預設帳號是 root
+        'PASSWORD': '',                    # XAMPP 預設密碼是「空的」，留白即可
+        'HOST': '127.0.0.1',               # 本機端
+        'PORT': '3307',                    # MySQL 預設通訊埠
+        'OPTIONS': {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
     }
 }
-
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
